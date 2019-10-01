@@ -8,8 +8,35 @@
 public class RoverData {
     int id;
     int time;
-    public RoverData(int id, int time){
+    int emr;
+    int xray;
+    int sunlight;
+
+    public int getId() {
+        return id;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public int getEmr() {
+        return emr;
+    }
+
+    public int getXray() {
+        return xray;
+    }
+
+    public int getSunlight() {
+        return sunlight;
+    }
+
+    public RoverData(int id, int time, int emr, int xray, int sunlight){
         this.id = id;
         this.time = time;
+        this.emr = emr;
+        this.xray = xray;
+        this.sunlight = sunlight;
     }
 }
