@@ -42,7 +42,7 @@ public class Client2 {
         //Try getting the response and print exception if occurs
         try{ Response response = okHttpClient.newCall(request).execute();
             ResponseMessage responseData = gson.fromJson(response.body().string(), ResponseMessage.class);
-            System.out.println(responseData);
+            System.out.println("The response for update is: "+ responseData.getId());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -81,9 +81,10 @@ public class Client2 {
         Request request = new Request.Builder().url(local).put(body).build();
         //Try getting the response and print exception if occurs
         try{ Response response = okHttpClient.newCall(request).execute();
-            ResponseMessage responseData = gson.fromJson(response.body().string(), ResponseMessage.class);
-            //Print the rover ID and time as we got from the server
-            System.out.println(responseData);
+            RoverData responseData = gson.fromJson(response.body().string(), RoverData.class);
+            System.out.println("The response to modify for ID " +id + " time "+ time + " is: " +
+                    " EMR: " + responseData.getEmr() + " Sunlight : "+ responseData.getSunlight() +
+                    " Xray: " + responseData.getXray());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -99,7 +100,9 @@ public class Client2 {
         try{ Response response = okHttpClient.newCall(request).execute();
             RoverData responseData = gson.fromJson(response.body().string(), RoverData.class);
             //Print the rover ID and time as we got from the server
-            System.out.println(responseData.getEmr());
+            System.out.println("The response for get for ID " +id + " time "+ time + " is: " +
+                    " EMR: " + responseData.getEmr() + " Sunlight : "+ responseData.getSunlight() +
+                    " Xray: " + responseData.getXray());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -110,12 +113,12 @@ public class Client2 {
         database = mongo.getDatabase("Client");
         rover2Col = database.getCollection("client2");
 
-        sendHttpRequest_update(2,128,234,315,234);
-        sendHttpRequest_update(2,256,235,136,11);
-        sendHttpRequest_update(2,512,236,757,453);
-        sendHttpRequest_delete(2,128);
-        sendHttpRequest_modify(2, 256,89);
-        sendHttpRequest_get(2,512);
+        sendHttpRequest_update(ID,128,234,315,234);
+        sendHttpRequest_update(ID,256,235,136,11);
+        sendHttpRequest_update(ID,512,236,757,453);
+        sendHttpRequest_delete(ID,128);
+        sendHttpRequest_modify(ID, 256,89);
+        sendHttpRequest_get(ID,512);
     }
 }
 

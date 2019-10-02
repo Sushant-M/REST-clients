@@ -31,6 +31,12 @@ public class Client1 {
         document.put("xray", xray);
         document.put("sunlight", sunlight);
         document.put("emr", emr);
+
+        //Opens up possibility of adding new factors.
+        if(sunlight > 250 && xray < 200){
+            document.put("energy factor", (sunlight*3) - 65);
+        }
+
         rover1Col.insertOne(document);
 
         //Send the req.
@@ -44,7 +50,7 @@ public class Client1 {
         //Try getting the response and print exception if occurs
         try{ Response response = okHttpClient.newCall(request).execute();
             ResponseMessage responseData = gson.fromJson(response.body().string(), ResponseMessage.class);
-            System.out.println(responseData);
+            System.out.println("Response for update is: " + responseData.getId());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -63,7 +69,7 @@ public class Client1 {
         //Try getting the response and print exception if occurs
         try{ Response response = okHttpClient.newCall(request).execute();
             //Print the rover ID and time as we got from the server
-            System.out.println("The response ID is: " + response.code());
+            System.out.println("The response for delete is: " + response.code());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -83,9 +89,11 @@ public class Client1 {
         Request request = new Request.Builder().url(local).put(body).build();
         //Try getting the response and print exception if occurs
         try{ Response response = okHttpClient.newCall(request).execute();
-            ResponseMessage responseData = gson.fromJson(response.body().string(), ResponseMessage.class);
+            RoverData responseData = gson.fromJson(response.body().string(), RoverData.class);
             //Print the rover ID and time as we got from the server
-            System.out.println(responseData);
+            System.out.println("The response to modify for ID " +id + " time "+ time + " is: " +
+                    " EMR: " + responseData.getEmr() + " Sunlight : "+ responseData.getSunlight() +
+                    " Xray: " + responseData.getXray());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -102,7 +110,9 @@ public class Client1 {
         try{ Response response = okHttpClient.newCall(request).execute();
             RoverData responseData = gson.fromJson(response.body().string(), RoverData.class);
             //Print the rover ID and time as we got from the server
-            System.out.println(responseData.getEmr());
+            System.out.println("The response to get for ID " +id + " time "+ time + " is: " +
+                    " EMR: " + responseData.getEmr() + " Sunlight : "+ responseData.getSunlight() +
+                    " Xray: " + responseData.getXray());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -114,11 +124,11 @@ public class Client1 {
         database = mongo.getDatabase("Client");
         rover1Col = database.getCollection("client1");
 
-        sendHttpRequest_update(1,128,234,315,234, rover1Col);
-        sendHttpRequest_update(1,256,235,136,11 , rover1Col);
-        sendHttpRequest_update(1,512,236,757,453, rover1Col);
-        sendHttpRequest_delete(1,128, rover1Col);
-        sendHttpRequest_modify(1, 256,89,rover1Col);
-        sendHttpRequest_get(1,512,rover1Col);
+        sendHttpRequest_update(ID,128,234,315,234, rover1Col);
+        sendHttpRequest_update(ID,256,235,136,11 , rover1Col);
+        sendHttpRequest_update(ID,512,236,120,453, rover1Col);
+        sendHttpRequest_delete(ID,128, rover1Col);
+        sendHttpRequest_modify(ID, 256,89,rover1Col);
+        sendHttpRequest_get(ID,256,rover1Col);
     }
 }
